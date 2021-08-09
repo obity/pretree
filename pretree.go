@@ -27,11 +27,11 @@ const (
 	MethodTrace   = "TRACE"
 )
 
-var treeGroup map[string]*tree
+var treeGroup map[string]*Tree
 
 func init() {
 	methods := []string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "CONNECT", "OPTIONS", "TRACE"}
-	treeGroup = make(map[string]*tree)
+	treeGroup = make(map[string]*Tree)
 	for _, method := range methods {
 		tree := newTree()
 		tree.name = string(method)
@@ -39,31 +39,31 @@ func init() {
 	}
 }
 
-type tree struct {
+type Tree struct {
 	rule       string
 	name       string
-	nodes      []*tree
+	nodes      []*Tree
 	isEnd      bool
 	isVariable bool
 }
 
-func newTree() *tree {
-	return &tree{}
+func newTree() *Tree {
+	return &Tree{}
 }
 
-func (t *tree) appendChild(child *tree) {
+func (t *Tree) appendChild(child *Tree) {
 	t.nodes = append(t.nodes, child)
 }
 
-func (t *tree) Child() []*tree {
+func (t *Tree) Child() []*Tree {
 	return t.nodes
 }
 
-func (t *tree) Rule() string {
+func (t *Tree) Rule() string {
 	return t.rule
 }
 
-func (t *tree) Name() string {
+func (t *Tree) Name() string {
 	return t.name
 }
 
@@ -72,12 +72,12 @@ func Store(method, urlRule string) {
 	t.insert(urlRule)
 }
 
-func Query(method, urlPath string) (bool, *tree) {
+func Query(method, urlPath string) (bool, *Tree) {
 	t := treeGroup[method]
 	return t.match(urlPath)
 }
 
-func (t *tree) insert(urlRule string) {
+func (t *Tree) insert(urlRule string) {
 	current := t
 	list := parsePath(urlRule)
 	for _, word := range list {
@@ -108,7 +108,7 @@ func (t *tree) insert(urlRule string) {
 	current.isEnd = true
 }
 
-func (t *tree) match(urlPath string) (bool, *tree) {
+func (t *Tree) match(urlPath string) (bool, *Tree) {
 	current := t
 	list := parsePath(urlPath)
 	for index, word := range list {
