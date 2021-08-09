@@ -19,7 +19,7 @@ const (
 	MethodHead    HttpMethod = "HEAD"
 	MethodPost    HttpMethod = "POST"
 	MethodPut     HttpMethod = "PUT"
-	MethodPatch   HttpMethod = "PATCH" // RFC 5789
+	MethodPatch   HttpMethod = "PATCH"
 	MethodDelete  HttpMethod = "DELETE"
 	MethodConnect HttpMethod = "CONNECT"
 	MethodOptions HttpMethod = "OPTIONS"
@@ -125,6 +125,8 @@ func (t *Tree) Next() []*Tree {
 }
 
 func parsePath(path string) []string {
+	path = strings.ReplaceAll(path, "{", ":")
+	path = strings.ReplaceAll(path, "}", "")
 	return strings.Split(path, "/")
 }
 
