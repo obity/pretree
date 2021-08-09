@@ -39,6 +39,7 @@ func init() {
 	}
 }
 
+// 前缀树
 type Tree struct {
 	rule       string
 	name       string
@@ -55,23 +56,28 @@ func (t *Tree) appendChild(child *Tree) {
 	t.nodes = append(t.nodes, child)
 }
 
+// 获取子节点函数
 func (t *Tree) Child() []*Tree {
 	return t.nodes
 }
 
+// 获取当前节点的路由规则
 func (t *Tree) Rule() string {
 	return t.rule
 }
 
+// 获取当前节点的名称
 func (t *Tree) Name() string {
 	return t.name
 }
 
+// 存入路由规则
 func Store(method, urlRule string) {
 	t := treeGroup[method]
 	t.insert(urlRule)
 }
 
+// 查找url匹配的路由规则
 func Query(method, urlPath string) (bool, *Tree) {
 	t := treeGroup[method]
 	return t.match(urlPath)
