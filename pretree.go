@@ -16,55 +16,77 @@ import (
 )
 
 const (
-	MethodHead    HttpMethod = "HEAD"
-	MethodPost    HttpMethod = "POST"
-	MethodPut     HttpMethod = "PUT"
-	MethodPatch   HttpMethod = "PATCH"
-	MethodDelete  HttpMethod = "DELETE"
-	MethodConnect HttpMethod = "CONNECT"
-	MethodOptions HttpMethod = "OPTIONS"
-	MethodTrace   HttpMethod = "TRACE"
+	MethodGET     = "GET"
+	MethodHead    = "HEAD"
+	MethodPost    = "POST"
+	MethodPut     = "PUT"
+	MethodPatch   = "PATCH"
+	MethodDelete  = "DELETE"
+	MethodConnect = "CONNECT"
+	MethodOptions = "OPTIONS"
+	MethodTrace   = "TRACE"
 )
 
-type HttpMethod string
-
-var treeMap map[HttpMethod]*Tree
+var treeGroup map[string]*tree
 
 func init() {
-	methods := []HttpMethod{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "CONNECT", "OPTIONS", "TRACE"}
-	treeMap = make(map[HttpMethod]*Tree)
+	methods := []string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "CONNECT", "OPTIONS", "TRACE"}
+	treeGroup = make(map[string]*tree)
 	for _, method := range methods {
 		tree := newTree()
-		tree.Name = string(method)
-		treeMap[method] = tree
+		tree.name = string(method)
+		treeGroup[method] = tree
 	}
 }
 
-type Tree struct {
-	Name       string
-	Nodes      []*Tree
+type tree struct {
+	rule       string
+	name       string
+	nodes      []*tree
 	isEnd      bool
 	isVariable bool
 }
 
-func newTree() *Tree {
-	return &Tree{}
+func newTree() *tree {
+	return &tree{}
 }
 
-func GetTreeByMethod(method HttpMethod) *Tree {
-	return treeMap[method]
+func (t *tree) appendChild(child *tree) {
+	t.nodes = append(t.nodes, child)
 }
 
-func (t *Tree) Insert(url string) {
-	root := t
-	list := parsePath(url)
+func (t *tree) Child() []*tree {
+	return t.nodes
+}
+
+func (t *tree) Rule() string {
+	return t.rule
+}
+
+func (t *tree) Name() string {
+	return t.name
+}
+
+func Store(method, urlRule string) {
+	t := treeGroup[method]
+	t.insert(urlRule)
+}
+
+func Query(method, urlPath string) (bool, *tree) {
+	t := treeGroup[method]
+	return t.match(urlPath)
+}
+
+func (t *tree) insert(urlRule string) {
+	current := t
+	list := parsePath(urlRule)
 	for _, word := range list {
 		isExist := false
 		// 如果已经存在路径，继续匹配子节点
-		for _, n := range root.Nodes {
-			if n.Name == word {
+		for _, n := range current.Child() {
+			if n.name == word {
 				isExist = true
-				root = n
+				current = n
 				break
 			}
 		}
@@ -74,28 +96,29 @@ func (t *Tree) Insert(url string) {
 		}
 		// 不存在的路径新增
 		node := newTree()
-		node.Name = word
+		node.name = word
 		// 记录本路径是否变量
 		if isVariable(word) {
 			node.isVariable = true
 		}
-		root.Nodes = append(root.Nodes, node)
-		root = node
+		current.appendChild(node)
+		current = node
 	}
-	root.isEnd = true
+	current.rule = urlRule
+	current.isEnd = true
 }
 
-func (t *Tree) Match(url string) (bool, *Tree) {
-	root := t
-	list := parsePath(url)
+func (t *tree) match(urlPath string) (bool, *tree) {
+	current := t
+	list := parsePath(urlPath)
 	for index, word := range list {
 		isExist := false
-		preVar := false
-		for _, n := range root.Nodes {
-			if n.Name == word {
-				preVar = false
+		hasVar := false
+		for _, n := range current.Child() {
+			if n.name == word {
+				hasVar = false
 				isExist = true
-				root = n
+				current = n
 				break
 			}
 		}
@@ -103,31 +126,36 @@ func (t *Tree) Match(url string) (bool, *Tree) {
 			continue
 		}
 		// 第二个路径匹配不到情况下，查找是否有变量路径，继续从变量路径往下找
-		for _, m := range root.Nodes {
-			if m.isVariable && index > 0 && !preVar {
-				preVar = true
-				root = m
+		for _, m := range current.Child() {
+			if m.isVariable && index > 0 && !hasVar {
+				hasVar = true
+				current = m
 				break
-			} else {
-				return false, nil
 			}
 		}
+		// 找到有变量路径,进入下一次循环
+		if hasVar {
+			continue
+		}
 	}
-	if root.isEnd {
-		return true, root
+	if current.isEnd {
+		return true, current
 	} else {
 		return false, nil
 	}
 }
 
-func (t *Tree) Next() []*Tree {
-	return t.Nodes
+func parsePath(path string) []string {
+	path = formatRule(path)
+	return strings.Split(path, "/")
 }
 
-func parsePath(path string) []string {
-	path = strings.ReplaceAll(path, "{", ":")
-	path = strings.ReplaceAll(path, "}", "")
-	return strings.Split(path, "/")
+func formatRule(rule string) string {
+	rule = strings.ReplaceAll(rule, "{", ":")
+	rule = strings.ReplaceAll(rule, "}", "")
+	rule = strings.TrimPrefix(rule, "/")
+	rule = strings.TrimSuffix(rule, "/")
+	return rule
 }
 
 func isVariable(s string) bool {
