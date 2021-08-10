@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	MethodGET     = "GET"
+	MethodGet     = "GET"
 	MethodHead    = "HEAD"
 	MethodPost    = "POST"
 	MethodPut     = "PUT"

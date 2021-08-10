@@ -18,10 +18,10 @@ import (
 )
 
 func main() {
-	pretree.Store(pretree.MethodGET, "account/{id}/info/:2333")
-	pretree.Store(pretree.MethodGET, "account/:id/login")
-	pretree.Store(pretree.MethodGET, "account/{id}")
-	pretree.Store(pretree.MethodGET, "bacteria/count_number_by_month")
+	pretree.Store(pretree.MethodGet, "account/{id}/info/:2333")
+	pretree.Store(pretree.MethodGet, "account/:id/login")
+	pretree.Store(pretree.MethodGet, "account/{id}")
+	pretree.Store(pretree.MethodGet, "bacteria/count_number_by_month")
 
 	list := []string{"account/929239",
 		"account/9929s/login",
@@ -29,7 +29,7 @@ func main() {
 		"bacteria/count_number_by_mont",
 	}
 	for _, v := range list {
-		ok, tree := pretree.Query(pretree.MethodGET, v)
+		ok, tree := pretree.Query(pretree.MethodGet, v)
 		if ok {
 			fmt.Printf("rule: %s url: %s result:%v\n", tree.Rule(), v, ok)
 
