@@ -9,6 +9,7 @@
    MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
    See the Mulan PSL v2 for more details.
 */
+
 package pretree
 
 import (
@@ -39,7 +40,9 @@ func init() {
 	}
 }
 
-// 前缀树
+// 前缀树数据结构
+//
+// Prefix tree data structure
 type Tree struct {
 	rule       string
 	name       string
@@ -56,12 +59,16 @@ func (t *Tree) appendChild(child *Tree) {
 	t.nodes = append(t.nodes, child)
 }
 
-// 获取子节点函数
+// 获取子节点
+//
+// Get child nodes
 func (t *Tree) Child() []*Tree {
 	return t.nodes
 }
 
 // 获取当前节点的路由规则
+//
+// Get the routing rule of the current node
 func (t *Tree) Rule() string {
 	return t.rule
 }
@@ -71,13 +78,17 @@ func (t *Tree) Name() string {
 	return t.name
 }
 
-// 存入路由规则
+// 存储路由规则
+//
+// Store routing rules
 func Store(method, urlRule string) {
 	t := treeGroup[method]
 	t.insert(urlRule)
 }
 
-// 查找url匹配的路由规则
+// 查询url匹配的树节点
+//
+// Query the tree node with matching URL
 func Query(method, urlPath string) (bool, *Tree) {
 	t := treeGroup[method]
 	return t.match(urlPath)
