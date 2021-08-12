@@ -74,8 +74,18 @@ func (t *Tree) Rule() string {
 }
 
 // 获取当前节点的名称
+//
+// Get the name of the current node
 func (t *Tree) Name() string {
 	return t.name
+}
+
+// 获取当前节点的变量名
+//
+// Get the variable name of the current node
+//	:id => id
+func (t *Tree) VarName() string {
+	return strings.TrimPrefix(t.name, ":")
 }
 
 // 存储路由规则
@@ -86,10 +96,10 @@ func Store(method, urlRule string) {
 	t.insert(urlRule)
 }
 
-// 查询url匹配的树节点
+// 查询URL匹配的树节点并返回变量
 //
-// Query the tree node with matching URL
-func Query(method, urlPath string) (bool, *Tree) {
+// Query the tree node with matching URL and return variables
+func Query(method, urlPath string) (isExist bool, node *Tree, vars map[string]string) {
 	t := treeGroup[method]
 	return t.match(urlPath)
 }
@@ -125,7 +135,9 @@ func (t *Tree) insert(urlRule string) {
 	current.isEnd = true
 }
 
-func (t *Tree) match(urlPath string) (bool, *Tree) {
+func (t *Tree) match(urlPath string) (bool, *Tree, map[string]string) {
+	// vars 用于存储路由变量数据
+	vars := make(map[string]string)
 	current := t
 	list := parsePath(urlPath)
 	for index, word := range list {
@@ -147,6 +159,7 @@ func (t *Tree) match(urlPath string) (bool, *Tree) {
 			if m.isVariable && index > 0 && !hasVar {
 				hasVar = true
 				current = m
+				vars[m.VarName()] = word
 				break
 			}
 		}
@@ -156,9 +169,9 @@ func (t *Tree) match(urlPath string) (bool, *Tree) {
 		}
 	}
 	if current.isEnd {
-		return true, current
+		return true, current, vars
 	} else {
-		return false, nil
+		return false, nil, nil
 	}
 }
 

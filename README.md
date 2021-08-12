@@ -14,3 +14,5 @@ See this document at [GoDoc](https://pkg.go.dev/github.com/obity/pretree)
     go get -u github.com/obity/pretree@latest
     
 # ToDo
+
+- [x] Query返回路由中的变量vars存在一个map中.

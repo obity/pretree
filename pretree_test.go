@@ -53,9 +53,9 @@ func Test_Match(t *testing.T) {
 		method := v[0]
 		urlPath := v[2]
 		rule := v[1]
-		ok, tree := pretree.Query(method, urlPath)
+		ok, tree, vars := pretree.Query(method, urlPath)
 		if ok && tree.Rule() == rule {
-			t.Logf("urlPath:%s match rule:%s result: %t", urlPath, tree.Rule(), ok)
+			t.Logf("urlPath:%s match rule:%s result: %t vars: %s", urlPath, tree.Rule(), ok, vars)
 		} else {
 			t.Errorf("method: %s urlPath:%s match rule:%s result: %t", method, urlPath, rule, ok)
 		}
