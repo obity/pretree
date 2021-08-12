@@ -40,6 +40,32 @@ func init() {
 	}
 }
 
+type PreTree struct {
+}
+
+// 初始化对象
+//
+// Initialize object
+func NewPreTree() {
+	return &PreTree{}
+}
+
+// 存储路由规则
+//
+// Store routing rules
+func (p *PreTree) Store(method, urlRule string) {
+	t := treeGroup[method]
+	t.insert(urlRule)
+}
+
+// 查询URL匹配的树节点并返回变量
+//
+// Query the tree node with matching URL and return variables
+func (P *PreTree) Query(method, urlPath string) (isExist bool, node *Tree, vars map[string]string) {
+	t := treeGroup[method]
+	return t.match(urlPath)
+}
+
 // 前缀树数据结构
 //
 // Prefix tree data structure
@@ -86,22 +112,6 @@ func (t *Tree) Name() string {
 //	:id => id
 func (t *Tree) VarName() string {
 	return strings.TrimPrefix(t.name, ":")
-}
-
-// 存储路由规则
-//
-// Store routing rules
-func Store(method, urlRule string) {
-	t := treeGroup[method]
-	t.insert(urlRule)
-}
-
-// 查询URL匹配的树节点并返回变量
-//
-// Query the tree node with matching URL and return variables
-func Query(method, urlPath string) (isExist bool, node *Tree, vars map[string]string) {
-	t := treeGroup[method]
-	return t.match(urlPath)
 }
 
 func (t *Tree) insert(urlRule string) {
