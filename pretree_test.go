@@ -45,19 +45,21 @@ func Test_Match(t *testing.T) {
 
 	for _, v := range data {
 		method := v[0]
-		rule := v[1]
-		pretree.Store(method, rule)
+		sourceRule := v[1]
+		p := pretree.NewPreTree()
+		p.Store(method, sourceRule)
 	}
 
 	for _, v := range data {
 		method := v[0]
 		urlPath := v[2]
-		rule := v[1]
-		ok, tree, vars := pretree.Query(method, urlPath)
-		if ok && tree.Rule() == rule {
-			t.Logf("urlPath:%s match rule:%s result: %t vars: %s", urlPath, tree.Rule(), ok, vars)
+		sourceRule := v[1]
+		p := pretree.NewPreTree()
+		ok, rule, vars := p.Query(method, urlPath)
+		if ok && rule == sourceRule {
+			t.Logf("urlPath:%s match rule:%s result: %t vars: %s", urlPath, rule, ok, vars)
 		} else {
-			t.Errorf("method: %s urlPath:%s match rule:%s result: %t", method, urlPath, rule, ok)
+			t.Errorf("method: %s urlPath:%s match rule:%s result: %t", method, urlPath, sourceRule, ok)
 		}
 	}
 }

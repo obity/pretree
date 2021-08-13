@@ -61,9 +61,15 @@ func (p *PreTree) Store(method, urlRule string) {
 // 查询URL匹配的树节点并返回变量
 //
 // Query the tree node with matching URL and return variables
-func (P *PreTree) Query(method, urlPath string) (isExist bool, node *Tree, vars map[string]string) {
+func (P *PreTree) Query(method, urlPath string) (isExist bool, rule string, vars map[string]string) {
 	t := treeGroup[method]
-	return t.match(urlPath)
+	isExist, node, vars := t.match(urlPath)
+	if isExist {
+		return true, node.Rule(), vars
+	} else {
+		return false, "", vars
+	}
+
 }
 
 // 前缀树数据结构
