@@ -46,7 +46,7 @@ type PreTree struct {
 // 初始化对象
 //
 // Initialize object
-func NewPreTree() {
+func NewPreTree() *PreTree {
 	return &PreTree{}
 }
 
