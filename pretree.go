@@ -28,48 +28,44 @@ const (
 	MethodTrace   = "TRACE"
 )
 
-var treeGroup map[string]*Tree
-
-func init() {
-	methods := []string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "CONNECT", "OPTIONS", "TRACE"}
-	treeGroup = make(map[string]*Tree)
-	for _, method := range methods {
-		tree := newTree()
-		tree.name = string(method)
-		treeGroup[method] = tree
-	}
-}
-
 type PreTree struct {
+	treeGroup map[string]*Tree
 }
 
 // 初始化对象
 //
 // Initialize object
 func NewPreTree() *PreTree {
-	return &PreTree{}
+	p := &PreTree{}
+	methods := []string{"GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "CONNECT", "OPTIONS", "TRACE"}
+	p.treeGroup = make(map[string]*Tree)
+	for _, method := range methods {
+		tree := newTree()
+		tree.name = string(method)
+		p.treeGroup[method] = tree
+	}
+	return p
 }
 
 // 存储路由规则
 //
 // Store routing rules
 func (p *PreTree) Store(method, urlRule string) {
-	t := treeGroup[method]
+	t := p.treeGroup[method]
 	t.insert(urlRule)
 }
 
 // 查询URL匹配的树节点并返回变量
 //
 // Query the tree node with matching URL and return variables
-func (P *PreTree) Query(method, urlPath string) (isExist bool, rule string, vars map[string]string) {
-	t := treeGroup[method]
+func (p *PreTree) Query(method, urlPath string) (isExist bool, rule string, vars map[string]string) {
+	t := p.treeGroup[method]
 	isExist, node, vars := t.match(urlPath)
 	if isExist {
 		return true, node.Rule(), vars
 	} else {
 		return false, "", vars
 	}
-
 }
 
 // 前缀树数据结构

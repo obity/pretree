@@ -43,10 +43,10 @@ func Test_Match(t *testing.T) {
 		{"POST", "/user", "/user"},
 	}
 
+	p := pretree.NewPreTree()
 	for _, v := range data {
 		method := v[0]
 		sourceRule := v[1]
-		p := pretree.NewPreTree()
 		p.Store(method, sourceRule)
 	}
 
@@ -54,7 +54,6 @@ func Test_Match(t *testing.T) {
 		method := v[0]
 		urlPath := v[2]
 		sourceRule := v[1]
-		p := pretree.NewPreTree()
 		ok, rule, vars := p.Query(method, urlPath)
 		if ok && rule == sourceRule {
 			t.Logf("urlPath:%s match rule:%s result: %t vars: %s", urlPath, rule, ok, vars)
