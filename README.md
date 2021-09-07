@@ -5,7 +5,6 @@
 [![Build](https://img.shields.io/github/workflow/status/obity/pretree/Go.svg)](#)
 [![Go Report Card](https://goreportcard.com/badge/github.com/obity/pretree?color=pink)](https://goreportcard.com/report/github.com/obity/pretree)
 [![Lines of code](https://img.shields.io/tokei/lines/github/obity/pretree.svg?color=beige)](#)
-[![Downloads of releases](https://img.shields.io/github/downloads/obity/pretree/total.svg?color=lavender)](https://github.com/obity/pretree/releases/latest)
 [![Languages](https://img.shields.io/github/languages/top/obity/pretree.svg?color=yellow)](#)
 [![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/obity/pretree)](#)
 [![GPL3 licensed](https://img.shields.io/github/license/obity/pretree.svg)](./LICENSE)
