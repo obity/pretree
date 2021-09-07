@@ -1,6 +1,6 @@
 # Pretree
 
-[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/obity/pretree?color=peru)](https://github.com/obity/pretree/releases/latest)
+[![GitHub release](https://img.shields.io/github/v/release/obity/pretree.svg?color=peru)](https://github.com/obity/pretree/releases/latest)
 [![Released API docs](https://img.shields.io/badge/go-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/github.com/obity/pretree)
 [![Build](https://img.shields.io/github/workflow/status/obity/pretree/Go.svg)](#)
 [![Go Report Card](https://goreportcard.com/badge/github.com/obity/pretree?color=pink)](https://goreportcard.com/report/github.com/obity/pretree)
