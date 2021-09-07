@@ -8,6 +8,7 @@
 [![Downloads of releases](https://img.shields.io/github/downloads/obity/pretree/total.svg?color=lavender)](https://github.com/obity/pretree/releases/latest)
 [![Languages](https://img.shields.io/github/languages/top/obity/pretree.svg?color=yellow)](#)
 [![GitHub go.mod Go version (subdirectory of monorepo)](https://img.shields.io/github/go-mod/go-version/obity/pretree)](#)
+[![GPL3 licensed](https://img.shields.io/github/license/obity/pretree.svg)](./LICENSE)
 
 pretree is a package for storing and querying routing rules with prefix tree .
 
