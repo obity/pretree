@@ -2,7 +2,7 @@
 
 [![GitHub release](https://img.shields.io/github/v/release/obity/pretree.svg?color=peru)](https://github.com/obity/pretree/releases/latest)
 [![Released API docs](https://img.shields.io/badge/go-reference-blue?logo=go&logoColor=white)](https://pkg.go.dev/github.com/obity/pretree)
-[![Build](https://img.shields.io/github/workflow/status/obity/pretree/Go.svg)](#)
+[![Build](https://img.shields.io/github/actions/workflow/status/obity/pretree/.github/workflows/go.yml?branch=master)](#)
 [![Go Report Card](https://goreportcard.com/badge/github.com/obity/pretree?color=pink)](https://goreportcard.com/report/github.com/obity/pretree)
 [![Lines of code](https://img.shields.io/tokei/lines/github/obity/pretree.svg?color=beige)](#)
 [![Languages](https://img.shields.io/github/languages/top/obity/pretree.svg?color=yellow)](#)
